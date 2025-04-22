@@ -1,4 +1,4 @@
-package victorSDK
+package client
 
 import (
 	"bytes"
