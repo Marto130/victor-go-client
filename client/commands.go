@@ -46,6 +46,24 @@ type CreateIndexCommandOutput struct {
 	} `json:"results"`
 }
 
+type DestroyIndexCommandInput struct {
+	IndexType int    `json:"index_type"`
+	Method    int    `json:"method"`
+	Dims      uint16 `json:"dims"`
+	IndexName string `json:"index_name"`
+}
+
+type DestroyIndexCommandOutput struct {
+	CommandOutput
+	Results struct {
+		IndexName string `json:"index_name"`
+		ID        string `json:"id"`
+		Dims      uint16 `json:"dims"`
+		IndexType int    `json:"index_type"`
+		Method    int    `json:"method"`
+	} `json:"results"`
+}
+
 type InsertVectorCommandInput struct {
 	IndexName string    `json:"index_name"`
 	ID        uint64    `json:"id"`
