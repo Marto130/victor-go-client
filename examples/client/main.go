@@ -20,6 +20,10 @@ func main() {
 		IndexName: "indice1",
 	}
 
+	destroyIndexParams := client.DestroyIndexCommandInput{
+		IndexName: "indice1",
+	}
+
 	v1 := client.InsertVectorCommandInput{
 		IndexName: "indice1",
 		ID:        1,
@@ -84,5 +88,11 @@ func main() {
 		log.Fatalf("Delete vector error: %+v", err)
 	}
 	fmt.Printf("%s\n%s\n%+v\n", deleteResult.Status, deleteResult.Message, deleteResult.Results)
+
+	destroyResult, err := vClient.DestroyIndex(&destroyIndexParams)
+	if err != nil {
+		log.Fatalf("Index destroy error: %+v", err)
+	}
+	fmt.Printf("%s\n%s\n%+v\n", destroyResult.Status, destroyResult.Message, destroyResult.Results)
 
 }

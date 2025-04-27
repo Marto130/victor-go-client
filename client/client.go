@@ -65,7 +65,7 @@ func (c *Client) CreateIndex(input *CreateIndexCommandInput) (*CreateIndexComman
 		return nil, fmt.Errorf("failed to execute request: %w", err)
 	}
 
-	fmt.Println("RESP" + resp.Status)
+	fmt.Println("RESP: " + resp.Status)
 
 	defer resp.Body.Close()
 
@@ -81,7 +81,44 @@ func (c *Client) CreateIndex(input *CreateIndexCommandInput) (*CreateIndexComman
 	if err := json.NewDecoder(resp.Body).Decode(&output); err != nil {
 		return nil, fmt.Errorf("failed to decode response: %w", err)
 	}
+	return &output, nil
+}
 
+func (c *Client) DestroyIndex(input *DestroyIndexCommandInput) (*DestroyIndexCommandOutput, error){
+	jsonData, err := json.Marshal(input)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal destroy index request: %w", err)
+	}
+
+	fmt.Println("URL "+c.BaseURL+fmt.Sprintf(routes.DestroyIndex, input.IndexName), input.IndexName)
+
+	req, err := http.NewRequest(http.MethodDelete, c.BaseURL+fmt.Sprintf(routes.DestroyIndex, input.IndexName), bytes.NewBuffer(jsonData))
+	if err != nil {
+		return nil, fmt.Errorf("failed to create request: %w", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := c.HttpClient.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to execute request: %w", err)
+	}
+
+	fmt.Println("RESP: " + resp.Status)
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		var errorResp map[string]string
+		if err := json.NewDecoder(resp.Body).Decode(&errorResp); err == nil {
+			return nil, fmt.Errorf("API error: %s", errorResp["message"])
+		}
+		return nil, fmt.Errorf("API error: status %d", resp.StatusCode)
+	}
+
+	var output DestroyIndexCommandOutput
+	if err := json.NewDecoder(resp.Body).Decode(&output); err != nil {
+		return nil, fmt.Errorf("failed to decode response: %w", err)
+	}
 	return &output, nil
 }
 
