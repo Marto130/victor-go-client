@@ -21,9 +21,6 @@ func main() {
 	}
 
 	destroyIndexParams := client.DestroyIndexCommandInput{
-		IndexType: 0,
-		Method:    0,
-		Dims:      5,
 		IndexName: "indice1",
 	}
 
@@ -62,13 +59,6 @@ func main() {
 
 	fmt.Printf("%s\n%s\n%+v\n", indexResult.Status, indexResult.Message, indexResult.Results)
 
-	destroyResult, err := vClient.DestroyIndex(&destroyIndexParams);
-	if err != nil {
-		log.Fatalf("Index destroy error: %+v", err);
-	}
-	fmt.Printf("%s\n%s\n%+v\n", destroyResult.Status, destroyResult.Message, destroyResult.Results)
-
-
 	insertResult1, err := vClient.InsertVector(&v1)
 	if err != nil {
 		log.Fatalf("Vector insertion error: %+v", err)
@@ -98,5 +88,11 @@ func main() {
 		log.Fatalf("Delete vector error: %+v", err)
 	}
 	fmt.Printf("%s\n%s\n%+v\n", deleteResult.Status, deleteResult.Message, deleteResult.Results)
+
+	destroyResult, err := vClient.DestroyIndex(&destroyIndexParams)
+	if err != nil {
+		log.Fatalf("Index destroy error: %+v", err)
+	}
+	fmt.Printf("%s\n%s\n%+v\n", destroyResult.Status, destroyResult.Message, destroyResult.Results)
 
 }
