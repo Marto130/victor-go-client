@@ -69,14 +69,6 @@ func (c *Client) CreateIndex(input *CreateIndexCommandInput) (*CreateIndexComman
 
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		var errorResp map[string]string
-		if err := json.NewDecoder(resp.Body).Decode(&errorResp); err == nil {
-			return nil, fmt.Errorf("API error: %s", errorResp["message"])
-		}
-		return nil, fmt.Errorf("API error: status %d", resp.StatusCode)
-	}
-
 	var output CreateIndexCommandOutput
 	if err := json.NewDecoder(resp.Body).Decode(&output); err != nil {
 		return nil, fmt.Errorf("failed to decode response: %w", err)
@@ -84,7 +76,7 @@ func (c *Client) CreateIndex(input *CreateIndexCommandInput) (*CreateIndexComman
 	return &output, nil
 }
 
-func (c *Client) DestroyIndex(input *DestroyIndexCommandInput) (*DestroyIndexCommandOutput, error){
+func (c *Client) DestroyIndex(input *DestroyIndexCommandInput) (*DestroyIndexCommandOutput, error) {
 	jsonData, err := json.Marshal(input)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal destroy index request: %w", err)

@@ -10,7 +10,7 @@ func main() {
 
 	vClient := client.NewClient(&client.ClientOptions{
 		Host: "localhost",
-		Port: "8080",
+		Port: "7007",
 	})
 
 	indexParams := client.CreateIndexCommandInput{
